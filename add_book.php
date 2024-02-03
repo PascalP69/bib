@@ -4,7 +4,7 @@ include('mysql.php');
 
 // Überprüfen, ob der Benutzer angemeldet ist und ein spezieller Benutzer ist (z. B. Admin).
 if (!isset($_SESSION["username"]) || $_SESSION["username"] != "admin@bib.de") {
-    header("Location: index.html");
+    header("Location: add_book.php");
     exit();
 }
 ?>
@@ -20,8 +20,10 @@ if (!isset($_SESSION["username"]) || $_SESSION["username"] != "admin@bib.de") {
     <title>Bibliothek - Neues Buch hinzufügen</title>
 </head>
 <body>
-    <h1>Neues Buch hinzufügen</h1>
-    
+    <?php
+    include('templates/header.php');
+    include('templates/nav.php');
+    ?>
     <form action="process_book.php" method="post">
         <label for="book_title">Titel:</label>
         <input type="text" name="book_title" required><br>

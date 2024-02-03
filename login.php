@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows == 1) {
         $_SESSION["username"] = $username;
-        header("Location: home.php");
+        header("Location: books.php");
         exit();
     } else {
         echo "Falscher Benutzername oder Passwort.";

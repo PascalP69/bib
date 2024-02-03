@@ -1,27 +1,28 @@
+<?php
+        session_start();
+        include('mysql.php');
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Benutzerprofil</title>
-    <link rel="stylesheet" href="css/uikit.min.css" />
-    <script src="js/uikit.min.js"></script>
-    <script src="js/uikit-icons.min.js"></script>
-</head>
+<?php
+        include('templates/head.php');
+?>
 
 <body>
-
+    <?php
+    include('templates/header.php');
+    include('templates/nav.php');
+    ?>
     <div class="uk-container uk-margin-large-left uk-margin-large-right uk-margin-large-top">
         <h1>Benutzerprofil</h1>
 
         <?php
-        session_start();
-        include('mysql.php');
 
         // Überprüfen, ob der Benutzer angemeldet ist.
         if (!isset($_SESSION["username"])) {
-            header("Location: index.html");
+            header("Location: profil.php");
             exit();
         }
 

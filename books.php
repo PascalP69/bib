@@ -4,20 +4,40 @@ include('mysql.php');
 
 // Überprüfen, ob der Benutzer angemeldet ist.
 if (!isset($_SESSION["username"])) {
-    header("Location: index.html");
+    header("Location: books.php");
     exit();
 }
 
 // Prüfen, ob das Formular abgeschickt wurde
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ausleihe_taetigen']) && isset($_POST['form_submitted'])) {
-    // Hier kannst du die ausgewählten Buch-IDs verarbeiten
     if (isset($_POST['selected_books'])) {
         $selected_books = $_POST['selected_books'];
-        // Jetzt kannst du die Buch-IDs in der Datenbank verarbeiten, z.B. auf "nicht verfügbar" setzen
-        foreach ($selected_books as $exemplar_id) {
 
-            // Füge hier deine Logik für die Datenbankaktualisierung ein
-            // Beispiel: $update_sql = "UPDATE exemplar SET verfügbarkeit = 0 WHERE exemplar_id = $exemplar_id";
+        //Holen des eingeloggten Usernamen und das Extrahieren der KundenID durch SQL Abfrage
+        $username = $_SESSION["username"];
+        $sql_get = "SELECT * FROM kunde WHERE email = '$username'";
+        $result_get = $conn->query($sql_get);
+
+        if ($result_get->num_rows > 0) {
+            $row = $result_get->fetch_assoc();
+            // k_id auf die user ID des eingeloggten nutzers setzen und sql ausführen um neuen Auftrag hinzuzufügen (dummy erstmal)
+
+            $ex_string = "";
+            foreach ($selected_books as $exemplar_id) {
+                $ex_string .= $exemplar_id . ";";
+            }
+            $k_id = $row['kunde_ID'];
+            $date = "2022-01-01";
+            $sql_get = "INSERT INTO verleihvorgang (kunden_ID, ausleihdatum, rückgabestatus, preis, zahlungsstatus, exemplare) VALUES ('$k_id', '$date',  '0', '1', '0', '$ex_string')";
+        }
+
+        if ($conn->query($sql_get) === TRUE) {
+            echo "Ausleihvorgang erfolgreich!";
+        } else {
+            echo "Fehler beim Ausleihen: " . $conn->error . " END";
+        }
+        // Exemplare aus der Datenbank auf 0 setzen um sie nicht verfügbar zu machen, da sie ausgeliehen wurden.
+        foreach ($selected_books as $exemplar_id) {
             $update_sql = "UPDATE exemplar SET verfügbarkeit = 0 WHERE exemplar_ID = $exemplar_id";
             $conn->query($update_sql);
         }
@@ -29,18 +49,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ausleihe_taetigen']) &
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/uikit.min.css" />
-    <script src="js/uikit.min.js"></script>
-    <script src="js/uikit-icons.min.js"></script>
-    <title>Bibliothek - Ausleihbare Bücher</title>
-</head>
+<?php
+        include('templates/head.php');
+?>
 
 <body>
-    <div class="uk-container uk-margin-large-left uk-margin-large-right">
-        <h1>Ausleihbare Bücher</h1>
+    
+        <?php
+            include('templates/header.php');
+            include('templates/nav.php');
+        ?>
         <form method="post" action="">
         <div class="uk-grid uk-child-width-1-1">
             <div>
@@ -88,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ausleihe_taetigen']) &
         </div>
         <input type="hidden" name="form_submitted" value="1">
                     </form>
-    </div>
+    
 </body>
 
 </html>
