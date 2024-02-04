@@ -3,6 +3,7 @@
     <div class="uk-navbar-left">
     <ul class="uk-navbar-nav">
     <li><a href="books.php">Bücher</a></li>
+    <li><a href="reset.php">RESET(DEBUG)</a></li>
 
         <?php
         // Prüfen, ob der Benutzer eingeloggt ist
