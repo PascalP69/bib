@@ -1,16 +1,6 @@
-<?php
-session_start();
-include('mysql.php');
-
-// Überprüfen, ob der Benutzer angemeldet ist und ein spezieller Benutzer ist (z. B. Admin).
-if (!isset($_SESSION["username"]) || $_SESSION["username"] != "admin@bib.de") {
-    header("Location: add_book.php");
-    exit();
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,24 +9,81 @@ if (!isset($_SESSION["username"]) || $_SESSION["username"] != "admin@bib.de") {
     <script src="js/uikit-icons.min.js"></script>
     <title>Bibliothek - Neues Buch hinzufügen</title>
 </head>
-<body>
+
+<body class="uk-background-muted">
     <?php
+    session_start();
+    include('mysql.php');
+
+    // Überprüfen, ob der Benutzer angemeldet ist und ein spezieller Benutzer ist (z. B. Admin).
+    if (!isset($_SESSION["username"]) || $_SESSION["username"] != "admin@bib.de") {
+        header("Location: add_book.php");
+        exit();
+    }
+
+    // Datenbankabfrage für Verlage & Kategorien
+    $query = "SELECT verlagname, verlag_ID FROM verlag";
+    $result = mysqli_query($conn, $query);
+    $verlage = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    $query = "SELECT kategorie.name, kategorie.kategorie_ID FROM kategorie";
+    $result_kat = mysqli_query($conn, $query);
+    $kategorien = mysqli_fetch_all($result_kat, MYSQLI_ASSOC);
+
     include('templates/header.php');
     include('templates/nav.php');
     ?>
-    <form action="process_book.php" method="post">
-        <label for="book_title">Titel:</label>
-        <input type="text" name="book_title" required><br>
-        <label for="book_category">Kategorie:</label>
-        <input type="text" name="book_category" required><br>
-        <label for="book_release">Erscheinungsjahr:</label>
-        <input type="text" name="book_release" required><br>
-        <label for="book_ISBN">ISBN</label>
-        <input type="text" name="book_ISBN" required><br>
-        <label for="book_verlag">Verlag</label>
-        <input type="text" name="book_verlag" required><br>
-        <!-- Weitere Buchinformationen können hinzugefügt werden -->
-        <input type="submit" value="Buch hinzufügen">
-    </form>
+    <div class="uk-container uk-flex uk-flex-center uk-margin-top">
+        <form class="uk-card uk-card-default uk-card-body uk-width-1-2@m" action="process_book.php" method="post">
+            <div class="uk-margin">
+                <label class="uk-form-label" for="book_title">Titel:</label>
+                <input class="uk-input" type="text" name="book_title" required>
+            </div>
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="book_release">Erscheinungsjahr:</label>
+                <input class="uk-input" type="text" name="book_release" required>
+            </div>
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="book_ISBN">ISBN:</label>
+                <input class="uk-input" type="text" name="book_ISBN" required>
+            </div>
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="book_preis">Preis:</label>
+                <input class="uk-input" type="text" name="book_preis" required>
+            </div>
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="book_verlag">Verlag:</label>
+                <select class="uk-select" name="book_verlag" required>
+                    <?php
+                    foreach ($verlage as $verlag) {
+                        echo "<option value='{$verlag['verlag_ID']}'>{$verlag['verlagname']}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="book_category">Kategorie:</label>
+                <select class="uk-select" name="book_category" required>
+                    <?php
+                    foreach ($kategorien as $kategorie) {
+                        echo "<option value='{$kategorie['kategorie_ID']}'>{$kategorie['name']}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+
+            <!-- Weitere Buchinformationen können hinzugefügt werden -->
+
+            <div class="uk-margin">
+                <input class="uk-button uk-button-primary" type="submit" value="Buch hinzufügen">
+            </div>
+        </form>
+    </div>
 </body>
+
 </html>
