@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 30. Nov 2023 um 12:30
--- Server-Version: 10.4.27-MariaDB
--- PHP-Version: 8.1.20
+-- Erstellungszeit: 05. Feb 2024 um 12:38
+-- Server-Version: 10.4.28-MariaDB
+-- PHP-Version: 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Datenbank: `bkrbib`
 --
+CREATE DATABASE IF NOT EXISTS `bkrbib` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `bkrbib`;
 
 -- --------------------------------------------------------
 
@@ -27,6 +29,7 @@ SET time_zone = "+00:00";
 -- Tabellenstruktur für Tabelle `autor`
 --
 
+DROP TABLE IF EXISTS `autor`;
 CREATE TABLE `autor` (
   `autor_ID` int(4) NOT NULL,
   `name` varchar(32) NOT NULL,
@@ -55,6 +58,7 @@ INSERT INTO `autor` (`autor_ID`, `name`, `vorname`) VALUES
 -- Tabellenstruktur für Tabelle `buch`
 --
 
+DROP TABLE IF EXISTS `buch`;
 CREATE TABLE `buch` (
   `buch_ID` int(4) NOT NULL,
   `verlag_ID` int(4) NOT NULL,
@@ -70,16 +74,20 @@ CREATE TABLE `buch` (
 --
 
 INSERT INTO `buch` (`buch_ID`, `verlag_ID`, `kategorie_ID`, `buchtitel`, `erscheinungsjahr`, `ISBN`, `tagespreis`) VALUES
-(21, 1, 1, 'Die Kunst des Programmierens', 2020, '978-3-16-148410-0', 0),
-(22, 2, 2, 'Der Weg zum Erfolg', 2015, '978-3-16-148410-1', 0),
-(23, 3, 3, 'Die Geheimnisse des Universums', 2018, '978-3-16-148410-2', 0),
-(24, 4, 4, 'Kochkunst für Anfänger', 2021, '978-3-16-148410-3', 0),
-(25, 5, 5, 'Geschichte der Antike', 2017, '978-3-16-148410-4', 0),
-(26, 6, 1, 'Moderne Kunst verstehen', 2019, '978-3-16-148410-5', 0),
-(27, 7, 2, 'Romane für die Seele', 2016, '978-3-16-148410-6', 0),
-(28, 8, 3, 'Die Welt der Tiere', 2022, '978-3-16-148410-7', 0),
-(29, 9, 4, 'Pflanzen und ihre Bedeutung', 2014, '978-3-16-148410-8', 0),
-(30, 10, 5, 'Musikgeschichte kompakt', 2023, '978-3-16-148410-9', 0);
+(21, 1, 1, 'Die Kunst des Programmierens', '2020', '978-3-16-148410-0', 2),
+(22, 2, 2, 'Der Weg zum Erfolg', '2015', '978-3-16-148410-1', 2),
+(23, 3, 3, 'Die Geheimnisse des Universums', '2018', '978-3-16-148410-2', 2),
+(24, 4, 4, 'Kochkunst für Anfänger', '2021', '978-3-16-148410-3', 2),
+(25, 5, 5, 'Geschichte der Antike', '2017', '978-3-16-148410-4', 4),
+(26, 6, 1, 'Moderne Kunst verstehen', '2019', '978-3-16-148410-5', 4),
+(27, 7, 2, 'Romane für die Seele', '2016', '978-3-16-148410-6', 2),
+(28, 8, 3, 'Die Welt der Tiere', '2022', '978-3-16-148410-7', 4),
+(29, 9, 4, 'Pflanzen und ihre Bedeutung', '2014', '978-3-16-148410-8', 2),
+(30, 10, 5, 'Musikgeschichte kompakt', '2023', '978-3-16-148410-9', 3),
+(33, 1, 1, 'fgsfsdf', '0000', '2423423', 0),
+(34, 8, 8, 'natt', '0000', '123123', 0),
+(35, 5, 4, 'Buch Name', '0000', '123123123', 5),
+(36, 1, 1, 'natt', '2010', '34234', 3);
 
 -- --------------------------------------------------------
 
@@ -87,6 +95,7 @@ INSERT INTO `buch` (`buch_ID`, `verlag_ID`, `kategorie_ID`, `buchtitel`, `ersche
 -- Tabellenstruktur für Tabelle `buch_autor`
 --
 
+DROP TABLE IF EXISTS `buch_autor`;
 CREATE TABLE `buch_autor` (
   `buchAutor_ID` int(4) NOT NULL,
   `buch_ID` int(4) NOT NULL,
@@ -115,6 +124,7 @@ INSERT INTO `buch_autor` (`buchAutor_ID`, `buch_ID`, `autor_ID`) VALUES
 -- Tabellenstruktur für Tabelle `exemplar`
 --
 
+DROP TABLE IF EXISTS `exemplar`;
 CREATE TABLE `exemplar` (
   `exemplar_ID` int(4) NOT NULL,
   `buch_ID` int(4) NOT NULL,
@@ -127,25 +137,33 @@ CREATE TABLE `exemplar` (
 --
 
 INSERT INTO `exemplar` (`exemplar_ID`, `buch_ID`, `zustand`, `verfügbarkeit`) VALUES
-(20, 21, 'Neu', 0),
-(21, 21, 'Gut', 0),
-(22, 21, 'Gebraucht', 0),
-(23, 22, 'Neu', 0),
-(24, 22, 'Gut', 0),
-(25, 23, 'Neu', 0),
-(26, 23, 'Gut', 0),
-(27, 24, 'Neu', 0),
-(28, 24, 'Gut', 0),
-(29, 25, 'Neu', 0),
-(30, 25, 'Gut', 0),
-(31, 26, 'Neu', 0),
-(32, 27, 'Gut', 0),
-(33, 28, 'Neu', 0),
-(34, 28, 'Gut', 0),
-(35, 29, 'Neu', 0),
-(36, 29, 'Gut', 0),
-(37, 30, 'Neu', 0),
-(38, 30, 'Gut', 0);
+(20, 21, 'Neu', 1),
+(21, 21, 'Gut', 1),
+(22, 21, 'Gebraucht', 1),
+(23, 22, 'Neu', 1),
+(24, 22, 'Gut', 1),
+(25, 23, 'Neu', 1),
+(26, 23, 'Gut', 1),
+(27, 24, 'Neu', 1),
+(28, 24, 'Gut', 1),
+(29, 25, 'Neu', 1),
+(30, 25, 'Gut', 1),
+(31, 26, 'Neu', 1),
+(32, 27, 'Gut', 1),
+(33, 28, 'Neu', 1),
+(34, 28, 'Gut', 1),
+(35, 29, 'Neu', 1),
+(36, 29, 'Gut', 1),
+(37, 30, 'Neu', 1),
+(38, 30, 'Gut', 1),
+(39, 35, 'Gut', 1),
+(40, 26, 'Ja is okay', 1),
+(41, 22, 'ja', 1),
+(42, 29, 'ne', 1),
+(43, 29, 'ne', 1),
+(44, 29, 'ne', 1),
+(45, 29, 'ne', 1),
+(46, 29, 'ne', 1);
 
 -- --------------------------------------------------------
 
@@ -153,6 +171,7 @@ INSERT INTO `exemplar` (`exemplar_ID`, `buch_ID`, `zustand`, `verfügbarkeit`) V
 -- Tabellenstruktur für Tabelle `kategorie`
 --
 
+DROP TABLE IF EXISTS `kategorie`;
 CREATE TABLE `kategorie` (
   `kategorie_ID` int(4) NOT NULL,
   `name` varchar(32) NOT NULL
@@ -180,6 +199,7 @@ INSERT INTO `kategorie` (`kategorie_ID`, `name`) VALUES
 -- Tabellenstruktur für Tabelle `kunde`
 --
 
+DROP TABLE IF EXISTS `kunde`;
 CREATE TABLE `kunde` (
   `kunde_ID` int(4) NOT NULL,
   `name` varchar(32) NOT NULL,
@@ -187,6 +207,7 @@ CREATE TABLE `kunde` (
   `geburtsdatum` date NOT NULL,
   `telefon` varchar(16) NOT NULL,
   `email` varchar(32) NOT NULL,
+  `passwort` varchar(10) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `ort_ID` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -195,17 +216,18 @@ CREATE TABLE `kunde` (
 -- Daten für Tabelle `kunde`
 --
 
-INSERT INTO `kunde` (`kunde_ID`, `name`, `vorname`, `geburtsdatum`, `telefon`, `email`, `status`, `ort_ID`) VALUES
-(11, 'Müller', 'Hans', '1980-05-15', '+49 176 12345678', 'hans.mueller@example.com', 0, 1),
-(12, 'Schmidt', 'Sabine', '1992-08-22', '+49 176 23456789', 'sabine.schmidt@example.com', 0, 1),
-(13, 'Wagner', 'Jens', '1985-03-10', '+49 176 34567890', 'jens.wagner@example.com', 0, 1),
-(14, 'Becker', 'Anja', '1990-11-28', '+49 176 45678901', 'anja.becker@example.com', 0, 4),
-(15, 'Schulz', 'Felix', '1982-07-03', '+49 176 56789012', 'felix.schulz@example.com', 0, 4),
-(16, 'Fischer', 'Laura', '1988-01-18', '+49 176 67890123', 'laura.fischer@example.com', 0, 3),
-(17, 'Koch', 'Robert', '1995-06-25', '+49 176 78901234', 'robert.koch@example.com', 0, 9),
-(18, 'Huber', 'Sophie', '1987-09-12', '+49 176 89012345', 'sophie.huber@example.com', 0, 1),
-(19, 'Bauer', 'Mark', '1984-04-05', '+49 176 90123456', 'mark.bauer@example.com', 0, 1),
-(20, 'Schneider', 'Lena', '1998-02-14', '+49 176 01234567', 'lena.schneider@example.com', 0, 2);
+INSERT INTO `kunde` (`kunde_ID`, `name`, `vorname`, `geburtsdatum`, `telefon`, `email`, `passwort`, `status`, `ort_ID`) VALUES
+(11, 'Müller', 'Hans', '1980-05-15', '+49 176 12345678', 'hans.mueller@example.com', '1234', 0, 1),
+(12, 'Schmidt', 'Sabine', '1992-08-22', '+49 176 23456789', 'sabine.schmidt@example.com', '', 0, 1),
+(13, 'Wagner', 'Jens', '1985-03-10', '+49 176 34567890', 'jens.wagner@example.com', '', 0, 1),
+(14, 'Becker', 'Anja', '1990-11-28', '+49 176 45678901', 'anja.becker@example.com', '', 0, 4),
+(15, 'Schulz', 'Felix', '1982-07-03', '+49 176 56789012', 'felix.schulz@example.com', '', 0, 4),
+(16, 'Fischer', 'Laura', '1988-01-18', '+49 176 67890123', 'laura.fischer@example.com', '', 0, 3),
+(17, 'Koch', 'Robert', '1995-06-25', '+49 176 78901234', 'robert.koch@example.com', '', 0, 9),
+(18, 'Huber', 'Sophie', '1987-09-12', '+49 176 89012345', 'sophie.huber@example.com', '', 0, 1),
+(19, 'Bauer', 'Mark', '1984-04-05', '+49 176 90123456', 'mark.bauer@example.com', '', 0, 1),
+(20, 'Schneider', 'Lena', '1998-02-14', '+49 176 01234567', 'lena.schneider@example.com', '', 0, 2),
+(21, 'admin', 'pascal', '1987-01-27', '12345', 'admin@bib.de', '1234', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -213,6 +235,7 @@ INSERT INTO `kunde` (`kunde_ID`, `name`, `vorname`, `geburtsdatum`, `telefon`, `
 -- Tabellenstruktur für Tabelle `ort`
 --
 
+DROP TABLE IF EXISTS `ort`;
 CREATE TABLE `ort` (
   `ort_ID` int(4) NOT NULL,
   `name` varchar(32) NOT NULL,
@@ -241,6 +264,7 @@ INSERT INTO `ort` (`ort_ID`, `name`, `plz`) VALUES
 -- Tabellenstruktur für Tabelle `rückgabe`
 --
 
+DROP TABLE IF EXISTS `rückgabe`;
 CREATE TABLE `rückgabe` (
   `rückgabe_ID` int(11) NOT NULL,
   `exemplar_ID` int(11) NOT NULL,
@@ -254,6 +278,7 @@ CREATE TABLE `rückgabe` (
 -- Tabellenstruktur für Tabelle `verlag`
 --
 
+DROP TABLE IF EXISTS `verlag`;
 CREATE TABLE `verlag` (
   `verlag_ID` int(4) NOT NULL,
   `verlagname` varchar(32) NOT NULL,
@@ -282,21 +307,17 @@ INSERT INTO `verlag` (`verlag_ID`, `verlagname`, `ort_ID`) VALUES
 -- Tabellenstruktur für Tabelle `verleihvorgang`
 --
 
+DROP TABLE IF EXISTS `verleihvorgang`;
 CREATE TABLE `verleihvorgang` (
   `verleih_ID` int(4) NOT NULL,
   `kunden_ID` int(4) NOT NULL,
   `ausleihdatum` date NOT NULL,
+  `rückgabedatum` date DEFAULT NULL,
   `rückgabestatus` tinyint(1) NOT NULL,
   `preis` int(12) NOT NULL,
-  `zahlungsstatus` tinyint(1) NOT NULL
+  `zahlungsstatus` tinyint(1) NOT NULL,
+  `exemplar_ID` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Daten für Tabelle `verleihvorgang`
---
-
-INSERT INTO `verleihvorgang` (`verleih_ID`, `kunden_ID`, `ausleihdatum`, `rückgabestatus`, `preis`, `zahlungsstatus`) VALUES
-(1, 18, '2023-11-30', 0, 20, 0);
 
 --
 -- Indizes der exportierten Tabellen
@@ -370,7 +391,8 @@ ALTER TABLE `verlag`
 --
 ALTER TABLE `verleihvorgang`
   ADD PRIMARY KEY (`verleih_ID`),
-  ADD KEY `kunden_ID` (`kunden_ID`);
+  ADD KEY `kunden_ID` (`kunden_ID`),
+  ADD KEY `exemplar_ID` (`exemplar_ID`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
@@ -386,7 +408,7 @@ ALTER TABLE `autor`
 -- AUTO_INCREMENT für Tabelle `buch`
 --
 ALTER TABLE `buch`
-  MODIFY `buch_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `buch_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT für Tabelle `buch_autor`
@@ -398,7 +420,7 @@ ALTER TABLE `buch_autor`
 -- AUTO_INCREMENT für Tabelle `exemplar`
 --
 ALTER TABLE `exemplar`
-  MODIFY `exemplar_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `exemplar_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT für Tabelle `kategorie`
@@ -410,7 +432,7 @@ ALTER TABLE `kategorie`
 -- AUTO_INCREMENT für Tabelle `kunde`
 --
 ALTER TABLE `kunde`
-  MODIFY `kunde_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `kunde_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT für Tabelle `ort`
@@ -434,7 +456,7 @@ ALTER TABLE `verlag`
 -- AUTO_INCREMENT für Tabelle `verleihvorgang`
 --
 ALTER TABLE `verleihvorgang`
-  MODIFY `verleih_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `verleih_ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- Constraints der exportierten Tabellen
@@ -483,7 +505,8 @@ ALTER TABLE `verlag`
 -- Constraints der Tabelle `verleihvorgang`
 --
 ALTER TABLE `verleihvorgang`
-  ADD CONSTRAINT `verleihvorgang_ibfk_2` FOREIGN KEY (`kunden_ID`) REFERENCES `kunde` (`kunde_ID`);
+  ADD CONSTRAINT `verleihvorgang_ibfk_2` FOREIGN KEY (`kunden_ID`) REFERENCES `kunde` (`kunde_ID`),
+  ADD CONSTRAINT `verleihvorgang_ibfk_3` FOREIGN KEY (`exemplar_ID`) REFERENCES `exemplar` (`exemplar_ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
