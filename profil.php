@@ -68,7 +68,21 @@ include('templates/head.php');
                         <tbody>
                             <?php
                             $username = $_SESSION["username"];
-                            $sql_leihen = "SELECT * FROM buch, exemplar, kunde, verleihvorgang WHERE kunde.email = '$username' and kunde.kunde_ID = verleihvorgang.kunden_ID and exemplar.buch_id = buch.buch_ID group by verleihvorgang.exemplar_ID";
+                            $sql_leihen = "SELECT 
+                                                (SELECT buchtitel 
+                                                FROM buch 
+                                                WHERE buch.buch_ID = exemplar.buch_id) AS buchtitel,
+                                                    ausleihdatum, 
+                                                    rückgabestatus, 
+                                                    preis, 
+                                                    zahlungsstatus, 
+                                                    verleihvorgang.exemplar_ID 
+                                                FROM 
+                                                    exemplar 
+                                                    INNER JOIN verleihvorgang ON exemplar.exemplar_ID = verleihvorgang.exemplar_ID 
+                                                    INNER JOIN kunde ON kunde.kunde_ID = verleihvorgang.kunden_ID 
+                                                WHERE 
+                                                    kunde.email = 'hans.mueller@example.com'";
                             $result_leihen = $conn->query($sql_leihen);
 
                             if ($result_leihen->num_rows > 0) {
