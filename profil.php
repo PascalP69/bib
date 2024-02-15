@@ -82,7 +82,7 @@ include('templates/head.php');
                                                     INNER JOIN verleihvorgang ON exemplar.exemplar_ID = verleihvorgang.exemplar_ID 
                                                     INNER JOIN kunde ON kunde.kunde_ID = verleihvorgang.kunden_ID 
                                                 WHERE 
-                                                    kunde.email = 'hans.mueller@example.com'";
+                                                    kunde.email = '$username'";
                             $result_leihen = $conn->query($sql_leihen);
 
                             if ($result_leihen->num_rows > 0) {
