@@ -10,12 +10,12 @@
     <title>Bibliothek - Neues Buch hinzufügen</title>
 </head>
 
-<body class="uk-background-muted">
+<body>
     <?php
     session_start();
     include('mysql.php');
 
-    // Überprüfen, ob der Benutzer angemeldet ist und ein spezieller Benutzer ist (z. B. Admin).
+    // Überprüfen, ob der Benutzer angemeldet ist und ein spezieller Benutzer ist (z. B. Admin). um nur diesem user zu erlauben die seite aufzurufen
     if (!isset($_SESSION["username"]) || $_SESSION["username"] != "admin@bib.de") {
         header("Location: add_book.php");
         exit();
@@ -30,12 +30,16 @@
     $result_kat = mysqli_query($conn, $query);
     $kategorien = mysqli_fetch_all($result_kat, MYSQLI_ASSOC);
 
-    include('templates/header.php');
+    // Einbinden der navi
     include('templates/nav.php');
     ?>
+
+    <!-- Bauen des Forms zum hinzufügen eines neuen Buchs -->
     <div class="uk-container uk-flex uk-flex-center uk-margin-top">
-        <form class="uk-card uk-card-default uk-card-body uk-width-1-2@m" action="process_book.php" method="post">
+        <!-- POST wird an die Seite "processing/process_book.php" geschickt -->
+        <form class="uk-card uk-card-default uk-card-body uk-width-1-2@m" action="processing/process_book.php" method="post">
             <div class="uk-margin">
+                <!-- Text der angezeigt wird, name und identifier des form objektes -->
                 <label class="uk-form-label" for="book_title">Titel:</label>
                 <input class="uk-input" type="text" name="book_title" required>
             </div>
@@ -56,8 +60,10 @@
             </div>
 
             <div class="uk-margin">
+                
                 <label class="uk-form-label" for="book_verlag">Verlag:</label>
                 <select class="uk-select" name="book_verlag" required>
+                    <!-- Dropdown füllen mit dem result der Datenbankabfrage oben -->
                     <?php
                     foreach ($verlage as $verlag) {
                         echo "<option value='{$verlag['verlag_ID']}'>{$verlag['verlagname']}</option>";
@@ -69,6 +75,7 @@
             <div class="uk-margin">
                 <label class="uk-form-label" for="book_category">Kategorie:</label>
                 <select class="uk-select" name="book_category" required>
+                    <!-- Dropdown füllen mit dem result der Datenbankabfrage oben -->
                     <?php
                     foreach ($kategorien as $kategorie) {
                         echo "<option value='{$kategorie['kategorie_ID']}'>{$kategorie['name']}</option>";
@@ -76,9 +83,7 @@
                     ?>
                 </select>
             </div>
-
-            <!-- Weitere Buchinformationen können hinzugefügt werden -->
-
+                    <!-- Button um das Buch hinzuzufügen -->
             <div class="uk-margin">
                 <input class="uk-button uk-button-primary" type="submit" value="Buch hinzufügen">
             </div>

@@ -8,7 +8,7 @@ if (!isset($_SESSION["username"])) {
     exit();
 }
 
-// Prüfen, ob das Formular abgeschickt wurde
+// Prüfen, ob das Formular abgeschickt wurde und der POST 'ausleihe_taetigen' beinhaltet
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ausleihe_taetigen']) && isset($_POST['form_submitted'])) {
     if (isset($_POST['selected_books'])) {
         $selected_books = $_POST['selected_books'];
@@ -17,15 +17,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ausleihe_taetigen']) &
         $username = $_SESSION["username"];
         $sql_get = "SELECT * FROM kunde WHERE email = '$username'";
         $result_get = $conn->query($sql_get);
-        
+
 
         if ($result_get->num_rows > 0) {
             $row = $result_get->fetch_assoc();
-            // k_id auf die user ID des eingeloggten nutzers setzen und sql ausführen um neuen Auftrag hinzuzufügen (dummy erstmal)
 
-            $ex_string = "";
+            // k_id auf die user ID des eingeloggten nutzers setzen und sql ausführen um neuen Auftrag hinzuzufügen (dummy erstmal)
             $k_id = $row['kunde_ID'];
-            //$date = "2022-01-01";
             foreach ($selected_books as $exemplar_id) {
                 $sql_book = "SELECT * FROM buch, exemplar WHERE buch.buch_ID = exemplar.buch_ID and exemplar.exemplar_ID = $exemplar_id";
                 $result_book = $conn->query($sql_book);
@@ -33,19 +31,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ausleihe_taetigen']) &
                     $row_book = $result_book->fetch_assoc();
                 }
                 $b_preis = $row_book["tagespreis"];
+                // Einen verleihvorgang hinzufügen für das jeweilige exemplar, einzeln da sie auch potentiell einzeln zurückgegeben werden.
                 $sql_get = "INSERT INTO verleihvorgang (kunden_ID, ausleihdatum, rückgabestatus, preis, zahlungsstatus, exemplar_ID) VALUES ('$k_id', now(),  '0', '$b_preis', '0', '$exemplar_id')";
                 if ($conn->query($sql_get) === TRUE) {
-                    echo "Ausleihvorgang erfolgreich!";
+                    // Success Debug message auskommentiert
+                    //echo "dfs";
+                    //echo "<script>UIkit.notification('Ausleihen erfolgreich', 'success');</script>";
                 } else {
                     echo "Fehler beim Ausleihen: " . $conn->error . " END";
                 }
             }
-            
-            
-            
         }
-
-
         // Exemplare aus der Datenbank auf 0 setzen um sie nicht verfügbar zu machen, da sie ausgeliehen wurden.
         foreach ($selected_books as $exemplar_id) {
             $update_sql = "UPDATE exemplar SET verfügbarkeit = 0 WHERE exemplar_ID = $exemplar_id";
@@ -59,17 +55,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ausleihe_taetigen']) &
 <!DOCTYPE html>
 <html lang="en">
 
-<?php
-        include('templates/head.php');
-?>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BKR Bibliothek - Buch Übersicht</title>
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="css/uikit.min.css" />
+
+    <!-- Optional: Theme CSS -->
+    <link rel="stylesheet" href="css/uikit-rtl.min.css" />
+
+    <!-- UIkit JS -->
+    <script src="js/uikit.min.js"></script>
+    <script src="js/uikit-icons.min.js"></script>
+</head>
+
+<script>
+    // Event listener musste benutzt werden weil es wohl timing probleme beim UIKit JS gibt
+    document.addEventListener("DOMContentLoaded", function () {
+        // Überprüfen, ob das Formular abgeschickt wurde und die Notify-Nachricht anzeigen
+        <?php
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ausleihe_taetigen']) && isset($_POST['form_submitted'])) {
+            if (isset($_POST['selected_books'])) {
+                echo "UIkit.notification('<span uk-icon=\'icon: check\'></span> Ausleihen erfolgreich!', { status: 'success', timeout: '2000'});";
+            } else {
+                echo "UIkit.notification('<span uk-icon=\'icon: close\'></span> Keine Bücher ausgewählt!', { status: 'danger', timeout: '2000'});";
+            }
+
+        }
+        ?>
+    });
+</script>
 
 <body>
-    
-        <?php
-            include('templates/header.php');
-            include('templates/nav.php');
-        ?>
-        <form method="post" action="">
+
+    <?php
+    include('templates/nav.php');
+    ?>
+    <form method="post" action="">
         <div class="uk-grid uk-child-width-1-1">
             <div>
 
@@ -111,12 +134,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ausleihe_taetigen']) &
                 </table>
             </div>
             <div class="uk-flex uk-flex-right">
-                    <button class="uk-button uk-button-primary" type="submit" name="ausleihe_taetigen">Ausleihe tätigen</button>
-                </div>
+                <button class="uk-button uk-button-primary" type="submit" name="ausleihe_taetigen">Ausleihe
+                    tätigen</button>
+            </div>
         </div>
         <input type="hidden" name="form_submitted" value="1">
-                    </form>
-    
+    </form>
+
 </body>
 
 </html>

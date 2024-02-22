@@ -10,31 +10,31 @@
     <title>Bibliothek - Exemplare hinzufügen</title>
 </head>
 
-<body class="uk-background-muted">
+<body>
     <?php
     session_start();
     include('mysql.php');
 
-    // Überprüfen, ob der Benutzer angemeldet ist und ein spezieller Benutzer ist (z. B. Admin).
+    // Überprüfen, ob der Benutzer angemeldet ist und ein spezieller Benutzer ist (z. B. Admin). um nur diesem user zu erlauben die seite aufzurufen
     if (!isset($_SESSION["username"]) || $_SESSION["username"] != "admin@bib.de") {
         header("Location: add_copies.php");
         exit();
     }
 
-    // Datenbankabfrage für Verlage & Kategorien
+    // Datenbankabfrage für Buch Titel und ID
     $query = "SELECT buchtitel, buch_ID FROM buch";
     $result = mysqli_query($conn, $query);
     $buch = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-    include('templates/header.php');
     include('templates/nav.php');
     ?>
     <div class="uk-container uk-flex uk-flex-center uk-margin-top">
-        <form class="uk-card uk-card-default uk-card-body uk-width-1-2@m" action="process_copies.php" method="post">
+        <form class="uk-card uk-card-default uk-card-body uk-width-1-2@m" action="processing/process_copies.php" method="post">
 
             <div class="uk-margin">
                 <label class="uk-form-label" for="book_title">Buch:</label>
                 <select class="uk-select" name="book_title" required>
+                    <!-- Da wir exemplare für vorhandene Bücher hinzufügen wollen, füllen wir hier ein dropdown mit den Büchern aus der Datenbank. -->
                     <?php
                     foreach ($buch as $buch) {
                         echo "<option value='{$buch['buch_ID']}'>{$buch['buchtitel']}</option>";
@@ -52,10 +52,6 @@
                 <label class="uk-form-label" for="book_amount">Menge:</label>
                 <input class="uk-input" type="text" name="book_amount" required>
             </div>
-
-
-
-            <!-- Weitere Buchinformationen können hinzugefügt werden -->
 
             <div class="uk-margin">
                 <input class="uk-button uk-button-primary" type="submit" value="Exemplare hinzufügen">

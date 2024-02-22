@@ -12,7 +12,6 @@
 
 <body>
     <?php
-    include('templates/header.php');
     include('templates/nav.php');
     ?>
     <div class="uk-container uk-margin-large-left uk-margin-large-right uk-margin-large-top">

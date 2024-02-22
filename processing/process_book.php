@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('mysql.php');
+include('../mysql.php');
 
 // Überprüfen, ob der Benutzer angemeldet ist und ein spezieller Benutzer ist (z. B. Admin).
 if (!isset($_SESSION["username"])) {
@@ -14,14 +14,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $book_release = $_POST["book_release"];
     $book_ISBN = $_POST["book_ISBN"];
     $book_verlag = $_POST["book_verlag"];
+    $book_preis = $_POST["book_preis"];
+
+
+
 
     // Hier sollte das Buch zur Datenbank hinzugefügt werden.
-    $sql = "INSERT INTO verleihvorgang (kunden_ID, ausleihdatum, rückgabestatus, preis,zahlungsstatus) VALUES ('$book_verlag', '$book_category', '$book_title', '$book_release', '$book_ISBN', '0')";
+    $sql = "INSERT INTO buch (verlag_ID, kategorie_ID, buchtitel, erscheinungsjahr, ISBN, tagespreis) VALUES ('$book_verlag', '$book_category', '$book_title', '$book_release', '$book_ISBN', '$book_preis')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Ausleihvorgang erfolgreich!";
+        echo "Das Buch '$book_title' wurde erfolgreich hinzugefügt.";
     } else {
-        echo "Fehler beim Ausleihen: " . $conn->error;
+        echo "Fehler beim Hinzufügen des Buchs: " . $conn->error;
     }
 }
 

@@ -20,7 +20,6 @@
 <div class="uk-container">
 
     <?php
-    include('templates/header.php');
     include('templates/nav.php');
     ?>
     <main id="main-content" class="uk-margin-top uk-grid uk-grid-stack">

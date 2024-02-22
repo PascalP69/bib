@@ -6,23 +6,30 @@ include('mysql.php');
 <!DOCTYPE html>
 <html lang="en">
 
-<?php
-include('templates/head.php');
-?>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BKR Bibliothek - Profil</title>
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="css/uikit.min.css" />
+
+    <!-- Optional: Theme CSS -->
+    <link rel="stylesheet" href="css/uikit-rtl.min.css" />
+
+    <!-- UIkit JS -->
+    <script src="js/uikit.min.js"></script>
+    <script src="js/uikit-icons.min.js"></script>
+</head>
 
 <body>
     <?php
-    include('templates/header.php');
     include('templates/nav.php');
     ?>
     <div class="uk-container uk-margin-left uk-margin-right uk-margin-large-top uk-width-1-1">
-
         <div class="uk-child-width-1-1@s uk-child-width-1-3@m uk-width-1-1" uk-grid>
             <div class="uk-card uk-card-default uk-card-body">
                 <h1>Benutzerprofil</h1>
-
                 <?php
-
                 // Überprüfen, ob der Benutzer angemeldet ist.
                 if (!isset($_SESSION["username"])) {
                     header("Location: profil.php");
@@ -50,16 +57,13 @@ include('templates/head.php');
                 ?>
             </div>
             <div class="uk-card uk-card-default uk-card-body uk-width-1-2">
-
                 <div>
-
                     <h2>Aktive Leihen</h2>
                     <table class="uk-table uk-table-striped uk-table-hover">
                         <thead>
                             <tr>
                                 <th style="text-align: center">Buchtitel</th>
                                 <th style="text-align: center">Ausleihdatum</th>
-                                <th style="text-align: center">Rückgabestatus</th>
                                 <th style="text-align: center">Preis</th>
                                 <th style="text-align: center">Zahlungsstatus</th>
                                 <th style="text-align: center">Exemplar</th>
@@ -68,6 +72,7 @@ include('templates/head.php');
                         <tbody>
                             <?php
                             $username = $_SESSION["username"];
+                            $cost = 0;
                             $sql_leihen = "SELECT 
                                                 (SELECT buchtitel 
                                                 FROM buch 
@@ -90,27 +95,33 @@ include('templates/head.php');
                                     echo '<tr>';
                                     echo '<td style="text-align: center">' . $row_leihen["buchtitel"] . '</td>';
                                     echo '<td style="text-align: center">' . $row_leihen["ausleihdatum"] . '</td>';
-                                    echo '<td style="text-align: center">' . $row_leihen["rückgabestatus"] . '</td>';
                                     echo '<td style="text-align: center">' . $row_leihen["preis"] . '€</td>';
-                                    echo '<td style="text-align: center">' . $row_leihen["zahlungsstatus"] . '</td>';
+
+                                    // Wenn der Zahlungsstatus 0 ist, zeige ein X icon, wenn er 1 ist, dann ein Checkmark.
+                                    if ($row_leihen["zahlungsstatus"] == 0) {
+                                        $cost = (int) $cost + (int) $row_leihen["preis"];
+                                        echo '<td style="text-align: center"><span uk-icon="close" style="color:red"></span></a></td>';
+                                    } else {
+                                        echo '<td style="text-align: center"><span uk-icon="check" style="color:green"></span></a></td>';
+                                    }
                                     echo '<td style="text-align: center">' . $row_leihen["exemplar_ID"] . '</td>';
                                     echo '</tr>';
                                 }
+
                             } else {
                                 echo '<tr><td colspan="7">Keine Daten gefunden.</td></tr>';
                             }
                             ?>
                         </tbody>
                     </table>
+                    <span uk-icon="icon: cart; ratio: 2" style="color:red"></span>
+                    <?php print("  Zahlung offen:  ");
+                    print($cost);
+                    print("€"); ?>
                 </div>
-
             </div>
-            
         </div>
     </div>
-
-
-
 </body>
 
 </html>

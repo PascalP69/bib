@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('mysql.php');
+include('../mysql.php');
 
 // Überprüfen, ob der Benutzer angemeldet ist und ein spezieller Benutzer ist (z. B. Admin).
 if (!isset($_SESSION["username"])) {
