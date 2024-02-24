@@ -114,10 +114,17 @@ include('mysql.php');
                             ?>
                         </tbody>
                     </table>
-                    <span uk-icon="icon: cart; ratio: 2" style="color:red"></span>
-                    <?php print("  Zahlung offen:  ");
+                    <?php
+                    if ($cost == 0) {
+                        echo '<span uk-icon="icon: cart; ratio: 2" style="color:green"></span>';
+
+                    } else {
+                        echo '<span uk-icon="icon: cart; ratio: 2" style="color:red"></span>';
+                    }
+                    print("  Zahlung offen:  ");
                     print($cost);
-                    print("€"); ?>
+                    print("€");
+                    ?>
                 </div>
             </div>
         </div>

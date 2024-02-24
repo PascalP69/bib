@@ -4,7 +4,7 @@
 <nav class="uk-sticky uk-navbar-container uk-background-secondary uk-dark" uk-navbar>
     <div class="uk-sticky uk-navbar-left uk-dark ">
         <ul class="uk-sticky uk-navbar-nav uk-dark">
-            <li><a href="books.php">Bücher</a></li>
+            <li><a href="books.php">Bücher Leihen</a></li>
             <li><a href="reset.php">RESET(DEBUG)</a></li>
 
             <?php

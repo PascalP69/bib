@@ -85,6 +85,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ausleihe_taetigen']) &
         }
         ?>
     });
+
+    function searchFunc() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
 </script>
 
 <body>
@@ -96,13 +118,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ausleihe_taetigen']) &
         <div class="uk-grid uk-child-width-1-1">
             <div>
 
-                <h2>Verfügbare Bücher</h2>
-                <table class="uk-table uk-table-striped uk-table-hover">
+                <h2>Bücher Leihen</h2>
+                <div class="uk-margin">
+                    <div class="uk-inline uk-width-1-1">
+                        <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: search"></span>
+                        <input class="uk-input uk-search-input" type="text" id="myInput" onkeyup="searchFunc()" placeholder="Buchtitel suchen...">
+                    </div>
+                </div>
+                <table class="uk-table uk-table-striped uk-table-hover" id="myTable">
                     <thead>
                         <tr>
-                            <th style="text-align: center">Exemplar ID</th>
-                            <th style="text-align: center">Zustand</th>
                             <th style="text-align: center">Titel</th>
+                            <th style="text-align: center">Zustand</th>
                             <th style="text-align: center">Erscheinungsjahr</th>
                             <th style="text-align: center">ISBN</th>
                             <th style="text-align: center">Tagespreis</th>
@@ -117,9 +144,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ausleihe_taetigen']) &
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 echo '<tr>';
-                                echo '<td style="text-align: center">' . $row["exemplar_ID"] . '</td>';
-                                echo '<td style="text-align: center">' . $row["zustand"] . '</td>';
                                 echo '<td style="text-align: center">' . $row["buchtitel"] . '</td>';
+                                echo '<td style="text-align: center">' . $row["zustand"] . '</td>';
                                 echo '<td style="text-align: center">' . $row["erscheinungsjahr"] . '</td>';
                                 echo '<td style="text-align: center">' . $row["ISBN"] . '</td>';
                                 echo '<td style="text-align: center">' . $row["tagespreis"] . '€</td>';
