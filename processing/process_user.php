@@ -7,7 +7,7 @@ if (!isset($_SESSION["username"])) {
     header("Location: index.html");
     exit();
 }
-
+// Wenn der request ein POST war schreibe die werte aus dem post in variablen
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST["name"];
     $vorname = $_POST["vorname"];
@@ -16,10 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $passwort = $_POST["passwort"];
     $wohnort = $_POST["wohnort"];
-
-
-
-
+    
     // User zur Datenbank hinzufügen mit den POST daten der add_user.php.
     $sql = "INSERT INTO kunde (name, vorname, geburtsdatum, telefon, email, passwort, ort_ID) VALUES ('$name', '$vorname', '$geburtstag', '$telefon', '$email', '$passwort', '$wohnort')";
 

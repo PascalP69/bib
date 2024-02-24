@@ -36,7 +36,7 @@ include('mysql.php');
                     exit();
                 }
 
-                // Annahme: Du hast eine Tabelle namens 'benutzer' in deiner Datenbank
+                // Tabellarische Liste der Kundendaten
                 $username = $_SESSION["username"];
                 $sql = "SELECT * FROM kunde WHERE email = '$username'";
                 $result = $conn->query($sql);
@@ -50,7 +50,7 @@ include('mysql.php');
                     echo '<p><strong>Nachname:</strong> ' . $row["geburtsdatum"] . '</p>';
                     echo '<p><strong>Telefon::</strong> ' . $row["telefon"] . '</p>';
                     echo '<p><strong>Email:</strong> ' . $row["email"] . '</p>';
-                    // Weitere Informationen je nach Bedarf ausgeben
+                    
                 } else {
                     echo "Benutzerprofil nicht gefunden.";
                 }
@@ -59,6 +59,7 @@ include('mysql.php');
             <div class="uk-card uk-card-default uk-card-body uk-width-1-2">
                 <div>
                     <h2>Aktive Leihen</h2>
+                    <!-- Bauen einer Tabelle die aktive LEihen anzeigt -->
                     <table class="uk-table uk-table-striped uk-table-hover">
                         <thead>
                             <tr>

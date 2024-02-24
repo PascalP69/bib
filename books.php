@@ -122,7 +122,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ausleihe_taetigen']) &
                 <div class="uk-margin">
                     <div class="uk-inline uk-width-1-1">
                         <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: search"></span>
-                        <input class="uk-input uk-search-input" type="text" id="myInput" onkeyup="searchFunc()" placeholder="Buchtitel suchen...">
+                        <input class="uk-input uk-search-input" type="text" id="myInput" onkeyup="searchFunc()"
+                            placeholder="Buchtitel suchen...">
                     </div>
                 </div>
                 <table class="uk-table uk-table-striped uk-table-hover" id="myTable">

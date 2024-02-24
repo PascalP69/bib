@@ -46,8 +46,14 @@
     session_start();
     include('mysql.php');
 
-    // Überprüfen, ob der Benutzer angemeldet ist und ein spezieller Benutzer ist (z. B. Admin).
-    if (!isset($_SESSION["username"]) || $_SESSION["username"] != "admin@bib.de") {
+    $username = $_SESSION["username"];
+    $sql_get = "SELECT status FROM kunde WHERE email = '$username'";
+    $result_get = $conn->query($sql_get);
+    $result_b = mysqli_fetch_assoc($result_get);
+    $resultstring = $result_b['status'];
+
+    // Überprüfen, ob der Benutzer angemeldet ist und ein spezieller Benutzer ist (z. B. Admin). um nur diesem user zu erlauben die seite aufzurufen
+    if (!isset($_SESSION["username"]) && $resultstring == 1) {
         header("Location: resolve_loans.php");
         exit();
     }
@@ -101,7 +107,7 @@
         }
     }
 
-
+    // Query zum füllen eines dropdowns mit den Kunden und ihrer Kundennummer
     $query = "SELECT * FROM kunde";
     $result = mysqli_query($conn, $query);
     $kunde = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -135,7 +141,7 @@
         // Kundendaten abrufen
         $customerData = getCustomerData($selectedCustomerId);
 
-        // Kundendaten anzeigen
+        // Kundendaten seperat anzeigen
         if ($customerData) {
             echo "Kunden-ID: " . $customerData['kunde_ID'] . "<br>";
             echo "Vorname: " . $customerData['vorname'] . "<br>";
@@ -146,7 +152,7 @@
                 <div class="uk-card uk-card-default uk-card-body uk-width-1-2">
 
                     <div>
-
+                        
                         <h2>Aktive Leihen</h2>
                         <table class="uk-table uk-table-striped uk-table-hover">
                             <thead>
@@ -191,12 +197,12 @@
                                         // Wenn zahlungsstatus = 0 dann die rückgabe checkbox deaktivieren und die bezahlen checkbox aktivieren
                                         if ($row_leihen["zahlungsstatus"] == 0) {
                                             $cost = (int) $cost + (int) $row_leihen["preis"];
-                                            echo '<td style="text-align: center"><a href="processing/process_payment.php" uk-icon="close" style="color:red"></a></td>';
+                                            echo '<td style="text-align: center"><span uk-icon="icon: close; ratio: 1" style="color:red"></span></td>';
                                             echo '<td style="text-align: center"><input class="uk-checkbox" disabled  type="checkbox" name="selected_books_rückgabe[]" value="' . $row_leihen["exemplar_ID"] . '"></td>';
                                             echo '<td style="text-align: center"><input class="uk-checkbox"   type="checkbox" name="selected_books_zahlung[]" value="' . $row_leihen["exemplar_ID"] . '"></td>';
                                             // wenn zahlungsstatus = 1 dann rückgabe checkbox aktivieren und bezahlen deaktivieren
                                         } else {
-                                            echo '<td style="text-align: center"><a href="processing/process_payment.php" uk-icon="check" style="color:green"></a></td>';
+                                            echo '<td style="text-align: center"><span uk-icon="icon: check; ratio: 1" style="color:green"></span></td>';
                                             echo '<td style="text-align: center"><input class="uk-checkbox"  type="checkbox" name="selected_books_rückgabe[]" value="' . $row_leihen["exemplar_ID"] . '"></td>';
                                             echo '<td style="text-align: center"><input class="uk-checkbox"  disabled type="checkbox" name="selected_books_zahlung[]" value="' . $row_leihen["exemplar_ID"] . '"></td>';
                                         }

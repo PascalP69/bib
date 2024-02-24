@@ -8,6 +8,7 @@ if (!isset($_SESSION["username"])) {
     exit();
 }
 
+// Wenn der request ein POST war schreibe die werte aus dem post in variablen
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $book_title = $_POST["book_title"];
     $book_category = $_POST["book_category"];
@@ -16,12 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $book_verlag = $_POST["book_verlag"];
     $book_preis = $_POST["book_preis"];
 
-
-
-
-    // Hier sollte das Buch zur Datenbank hinzugefügt werden.
+    // Buch mit den Variablen zur DB hinzufügen
     $sql = "INSERT INTO buch (verlag_ID, kategorie_ID, buchtitel, erscheinungsjahr, ISBN, tagespreis) VALUES ('$book_verlag', '$book_category', '$book_title', '$book_release', '$book_ISBN', '$book_preis')";
-
+    // Query ausführen
     if ($conn->query($sql) === TRUE) {
         echo "Das Buch '$book_title' wurde erfolgreich hinzugefügt.";
     } else {

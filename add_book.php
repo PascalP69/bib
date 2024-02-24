@@ -13,15 +13,16 @@
 <body>
     <?php
     session_start();
+
     include('mysql.php');
     $username = $_SESSION["username"];
     $sql_get = "SELECT status FROM kunde WHERE email = '$username'";
     $result_get = $conn->query($sql_get);
-    $result = mysqli_fetch_assoc($result_get);
-    $resultstring = $result['status'];
+    $result_b = mysqli_fetch_assoc($result_get);
+    $resultstring = $result_b['status'];
 
     // Überprüfen, ob der Benutzer angemeldet ist und ein spezieller Benutzer ist (z. B. Admin). um nur diesem user zu erlauben die seite aufzurufen
-    if (isset($_SESSION["username"]) && $resultstring == 1) {
+    if (!isset($_SESSION["username"]) && $resultstring == 1) {
         header("Location: add_book.php");
         exit();
     }
@@ -42,7 +43,8 @@
     <!-- Bauen des Forms zum hinzufügen eines neuen Buchs -->
     <div class="uk-container uk-flex uk-flex-center uk-margin-top">
         <!-- POST wird an die Seite "processing/process_book.php" geschickt -->
-        <form class="uk-card uk-card-default uk-card-body uk-width-1-2@m" action="processing/process_book.php" method="post">
+        <form class="uk-card uk-card-default uk-card-body uk-width-1-2@m" action="processing/process_book.php"
+            method="post">
             <div class="uk-margin">
                 <!-- Text der angezeigt wird, name und identifier des form objektes -->
                 <label class="uk-form-label" for="book_title">Titel:</label>
@@ -65,7 +67,7 @@
             </div>
 
             <div class="uk-margin">
-                
+
                 <label class="uk-form-label" for="book_verlag">Verlag:</label>
                 <select class="uk-select" name="book_verlag" required>
                     <!-- Dropdown füllen mit dem result der Datenbankabfrage oben -->
@@ -88,7 +90,7 @@
                     ?>
                 </select>
             </div>
-                    <!-- Button um das Buch hinzuzufügen -->
+            <!-- Button um das Buch hinzuzufügen -->
             <div class="uk-margin">
                 <input class="uk-button uk-button-primary" type="submit" value="Buch hinzufügen">
             </div>

@@ -7,7 +7,7 @@ session_unset();
 // Session zerstören
 session_destroy();
 
-// Weiterleitung zur Login-Seite (oder einer anderen gewünschten Seite)
+// Weiterleitung zur Login-Seite (oder einer anderen Seite)
 header("Location: index.html");
 exit();
 ?>

@@ -13,6 +13,7 @@
 <body>
     <?php
     session_start();
+    
     include('mysql.php');
     $username = $_SESSION["username"];
     $sql_get = "SELECT status FROM kunde WHERE email = '$username'";
@@ -21,7 +22,7 @@
     $resultstring = $result['status'];
 
     // Überprüfen, ob der Benutzer angemeldet ist und ein spezieller Benutzer ist (z. B. Admin). um nur diesem user zu erlauben die seite aufzurufen
-    if (isset($_SESSION["username"]) && $resultstring == 1) {
+    if (!isset($_SESSION["username"]) && $resultstring == 1) {
         header("Location: add_copies.php");
         exit();
     }
@@ -34,7 +35,8 @@
     include('templates/nav.php');
     ?>
     <div class="uk-container uk-flex uk-flex-center uk-margin-top">
-        <form class="uk-card uk-card-default uk-card-body uk-width-1-2@m" action="processing/process_copies.php" method="post">
+        <form class="uk-card uk-card-default uk-card-body uk-width-1-2@m" action="processing/process_copies.php"
+            method="post">
 
             <div class="uk-margin">
                 <label class="uk-form-label" for="book_title">Buch:</label>
