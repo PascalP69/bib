@@ -14,9 +14,14 @@
     <?php
     session_start();
     include('mysql.php');
+    $username = $_SESSION["username"];
+    $sql_get = "SELECT status FROM kunde WHERE email = '$username'";
+    $result_get = $conn->query($sql_get);
+    $result = mysqli_fetch_assoc($result_get);
+    $resultstring = $result['status'];
 
     // Überprüfen, ob der Benutzer angemeldet ist und ein spezieller Benutzer ist (z. B. Admin). um nur diesem user zu erlauben die seite aufzurufen
-    if (!isset($_SESSION["username"]) || $_SESSION["username"] != "admin@bib.de") {
+    if (isset($_SESSION["username"]) && $resultstring == 1) {
         header("Location: add_book.php");
         exit();
     }

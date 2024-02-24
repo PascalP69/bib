@@ -8,9 +8,20 @@
             <li><a href="reset.php">RESET(DEBUG)</a></li>
 
             <?php
+            include('mysql.php');
+
+            // Holen des status wertes des eingeloggten nutzers um damit zu erlauben, dass ein mitarbeiter mit status "1" admin rechte bekommt, normale user mit "0" jedoch nicht.
+            $username = $_SESSION["username"];
+            $sql_get = "SELECT status FROM kunde WHERE email = '$username'";
+            $result_get = $conn->query($sql_get);
+            $result = mysqli_fetch_assoc($result_get);
+            $resultstring = $result['status'];
+            //print($resultstring);
+
+
             // Prüfen, ob der Benutzer eingeloggt ist
-            
-            if (isset($_SESSION["username"]) && $_SESSION["username"] == "admin@bib.de") {
+            // Abgleichen ob der vorher geholte resultstring eine 1 oder eine 0 ist. Wenn 1, dann füge die navigations felder hinzu.
+            if (isset($_SESSION["username"]) && $resultstring == 1) {
                 echo '<li><a href="add_user.php">Benutzer Hinzufügen</a></li>';
                 echo '<li><a href="add_book.php">Buch Hinzufügen</a></li>';
                 echo '<li><a href="add_copies.php">Exemplare Hinzufügen</a></li>';
